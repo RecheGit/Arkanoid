@@ -27,7 +27,7 @@ var GF = function(){
     ctx.lineWidth = 5;
     ctx.fill();
     ctx.stroke();
-   // canvas.width = w;
+   // canvas.width = w; Esto es para limpiar la pantalla
     requestAnimationFrame(mainLoop);
   };
   var start = function(){
