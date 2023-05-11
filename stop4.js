@@ -99,6 +99,7 @@ var GF = function() {
       direction = direction * -1;
       x = w - vausWidth;
     }
+
      
   }
 
