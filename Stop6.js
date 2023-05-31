@@ -11,6 +11,7 @@ var delta;
 // función auxiliar
 var calcDistanceToMove = function(delta, speed) {
   // TU CÓDIGO AQUÍ
+  return (speed * delta) /1000;
   };
 
 function Ball(x, y, angle, v, diameter, sticky) {
@@ -45,18 +46,22 @@ function Ball(x, y, angle, v, diameter, sticky) {
   // (animación basada en el tiempo)
   // OJO: la posición y no puede ser inferior a 0 en ningún momento
  // RECUERDA: delta es una variable global a la que puedes acceder...
+
  if (x != undefined && y != undefined) {
-    this.x = x;
-    this.y = y;
-  } else {
-    var incX = this.v * Math.cos(this.angle);
-    var incY = this.v * Math.sin(this.angle);
-
-    //        console.log(this.angle + "cos:" + Math.cos(this.angle) + " s:" + this.speed + " incx:"+ incX + " y:" + this.y + " incy:" + incY + " " + calcDistanceToMove(delta, incX) + " " + calcDistanceToMove(delta, incY));
-    this.x += calcDistanceToMove(delta, incX);
-    this.y -= calcDistanceToMove(delta, incY);
-
-  }
+  this.x = x;
+  this.y = y;
+} else {
+  var incX = this.v * Math.cos(this.angle);
+  var incY = this.v * Math.sin(this.angle);
+  this.x += calcDistanceToMove(delta, incX);
+  this.y -= calcDistanceToMove(delta, incY);
+}
+if (this.y < this.diameter / 2) {
+  //this.angle = -this.angle;
+  //this.y = this.diameter / 2;
+  this.y=0;
+  this.x=30;
+}
   };
 
 }
@@ -80,17 +85,13 @@ var GF = function() {
   var fps, oldTime = 0;
 
   var speed = 300; // px/s 
-  var vausWidth = 30,
-    vausHeight = 10;
+  var vausWidth = 30, vausHeight = 10;
 
   var balls = [];
 
   // vars for handling inputs
-  var inputStates = {
-    left: 0,
-    right: 0,
-    space: 0
-  };
+  var inputStates = {left: 0, right: 0, space: 0};
+
 
   var measureFPS = function(newTime) {
 
@@ -125,17 +126,63 @@ var GF = function() {
 
   // Función para pintar la raqueta Vaus
   function drawVaus(x, y) {
-// TU CÓDIGO AQUÍ
+  // TU CÓDIGO AQUÍ
+  var ctx = canvas.getContext("2d");
+  ctx.save();
+  // Establecer el color de la raqueta en negro
+  ctx.fillStyle = 'black';
+  // Dibujar un rectángulo en la posición y tamaño adecuados
+  ctx.fillRect(x, y, 30, 10);
+  ctx.restore();
   }
 
 
   var updatePaddlePosition = function() {
-
-
+    
     var incX = Math.ceil(calcDistanceToMove(delta, speed));
-
+    
     // check inputStates
     // TU CÓDIGO AQUÍ
+    if(inputStates.left == 1){
+        x = x-incX;
+        if(x<=0){
+            x=0;
+        }
+        //movimiento izquierda
+        console.log("izquierda");
+    }
+    //Si pones un else if no se queda quieto al pulsar dos flechas al mismo tiempo
+    if(inputStates.right==1){
+        //movimiento derecha
+        x=x+incX;
+        if(x>=w-vausWidth){
+            x=w-vausWidth;
+        }
+        console.log("derecha");
+    }
+
+}
+function gestorTeclado() {
+  document.addEventListener('keydown', (e) => {
+  if (e.code === "ArrowLeft") {
+      inputStates.left = 1;
+  }
+  else if (e.code === "ArrowRight") {
+      inputStates.right = 1;
+  }
+});
+
+document.addEventListener('keyup', (e) => {
+  if (e.code === "ArrowLeft") {
+      inputStates.left = 0;
+  }
+  else if (e.code === "ArrowRight") {
+      inputStates.right = 0;
+  }
+  else if (e.code === "Space") {
+      console.log("ESPACIO PULSADO");
+  }
+});
 }
 
 
@@ -187,16 +234,32 @@ var GF = function() {
 // el listener será para keydown (pulsar)
 // y otro para keyup
 
+    gestorTeclado();
+
 
 // TU CÓDIGO AQUÍ
 // Instancia una bola con los parámetros del enunciado e introdúcela en el array balls
 
-	new_ball = new Ball(10, 70, Math.PI / 3, 100, 6, false);
-	balls.push(new_ball);
+    balls.push(new Ball(10, 70, Math.PI / 3, 100, 6, false));
+
+
     // start the animation
     requestAnimationFrame(mainLoop);
     
+    // TESTING
+   test('La bola sube hasta arriba', function(assert) {
+  var done = assert.async();
+  setTimeout(function() {
+  var verdes = 0;
+  for (var i=50; i<145; i++) {  
+     // comprobar que la bola está pegada al techo, en algún punto de la esquina superior derecha
+      if (Array.prototype.slice.apply(canvas.getContext("2d").getImageData(i, 0, 1, 1).data)[1] > 0) verdes++; // componente G de RGB
+  } 
+  assert.ok(verdes>2, "Passed!");
+    done();
+  }, 8000);
 
+});
 
 
     

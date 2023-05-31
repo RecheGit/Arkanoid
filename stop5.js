@@ -134,11 +134,7 @@ function gestorTeclado() {
                 x=w-vausWidth;
             }
             console.log("derecha");
-
         }
-        
-
-
 }
 
  function timer(currentTime) {

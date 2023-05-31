@@ -556,7 +556,7 @@ window.onload = function() {
 		// Instancia una bola con los parámetros del enunciado e introdúcela en el array balls
 		//new_ball = new Ball(10, 70, Math.PI / 3, 100, 6, false);
 		//balls.push(new_ball);
-	    
+
 	    //createBricks();
 
 	    // start the animation
