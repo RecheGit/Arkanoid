@@ -29,7 +29,7 @@ var ANCHURA_LADRILLO = 20, ALTURA_LADRILLO = 10;
     }
   function testCollisionWithWalls(ball, w, h) {
           // TU CÓDIGO AQUÍ
-                  // Lateral drch
+        // Lateral drch
         if (ball.x > w - ball.diameter / 2) {
             ball.angle = -ball.angle + Math.PI;
             ball.x = w - ball.diameter / 2;
