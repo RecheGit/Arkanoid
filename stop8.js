@@ -70,6 +70,8 @@ function testCollisionWithWalls(ball, w, h) {
       if (ball.y > h - ball.diameter / 2) {
         ball.angle = -ball.angle;
         ball.y = h - ball.diameter / 2;
+
+        //restamos una vida
         return true;
       }
       // Lateral izq 
@@ -401,6 +403,9 @@ var GF = function() {
       ball.move();
 
       var die = testCollisionWithWalls(ball, w, h);
+      if(die==true){
+        lifes=lifes-1;
+      }
 
       // NUEVO
       // test if ball collides with any brick
